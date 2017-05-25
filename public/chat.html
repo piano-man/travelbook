@@ -1,0 +1,39 @@
+<html>
+    <head>
+            <script src="jquery-3.1.1.min.js"></script>
+            <script src="socket.io.js"></script>
+            <link rel="stylesheet" type="text/css" href="new.css">
+
+    </head>
+    <body>
+        <div class="row">
+            <div id="list1" class="chatlist">
+            </div>
+        </div>
+        <script>
+                var socket = io.connect("http://localhost:3000/");
+
+        //window.onload = function(){
+            console.log("phase4")
+            $.get("/chat",function(data){
+                console.log("phase5")
+                console.log(data);
+                var len = data.length;
+                console.log(len);
+                for(i=0;i<len;i++)
+                {
+                    $("#list1").append('<button type="button" id="' + data[i].name + '"  onclick="openchat()">' + data[i].name + '</button><br />');
+                }
+            })
+            function openchat()
+            {
+
+
+            }
+
+        
+            
+        
+        </script>
+    </body>
+</html>

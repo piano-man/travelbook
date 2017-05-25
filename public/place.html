@@ -95,6 +95,10 @@
   </head>
 
   <body>
+<div class="row">
+    <button id='chat' type="button" onclick = "fire()">Chat</button>
+</div>
+
 
     <div id="findhotels">
       Find hotels in:
@@ -138,6 +142,13 @@
         </table>
       </div>
     </div>
+    <script>
+        function fire() {
+          console.log("phase4")
+          window.location='/chat.html';
+      }
+    </script>
+
 
     <script>
       // This example uses the autocomplete feature of the Google Places API.
@@ -148,6 +159,8 @@
       // This example requires the Places library. Include the libraries=places
       // parameter when you first load the API. For example:
       // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
+
+  
 
       var map, places, infoWindow;
       var markers = [];

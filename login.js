@@ -3,6 +3,8 @@ var app = express();
 var bodyParser = require('body-parser');
 var http = require('http').createServer(app);
 var sessions = require('express-session');
+var io = require('socket.io')(http);
+
 var mysql = require('mysql');
 var connection = mysql.createConnection({
     host: 'localhost',
@@ -18,6 +20,7 @@ app.use(express.static('./public'));
 app.use(bodyParser.urlencoded({ extended: true }));
 var name;
 var password;
+var pn;
 var path = __dirname + '/index.html';
 app.get('/', function (req, res) {
   res.sendFile(path);
@@ -35,6 +38,7 @@ app.post('/login',function(req,res){
         console.log(result[0].password);
         if(password==result[0].password)
         {
+             connection.query("update users set status ="+"'online'"+" where name = "+"'"+name+"'")
             res.redirect('success.html');
         }
     })
@@ -49,7 +53,8 @@ app.post('/sign',function(req,res){
     var user = {
         name: n,
         password: p,
-        place: ""
+        place: "",
+        status: ""
     }
     connection.query("insert into users set ? ",user,function(err,result){
 
@@ -59,8 +64,21 @@ app.post('/sign',function(req,res){
 })
 app.post('/place',function(req,res){
     console.log("phase3")
-    var pn = req.body.pname;
+    pn = req.body.pname;
     connection.query("update users set place ="+"'"+pn+"'"+" where name = "+"'"+name+"'")
     res.redirect('place.html');
 })
 
+app.get('/exit',function(req,res){
+    
+    connection.query("update users set status ="+"'offline'"+" where name = "+"'"+name+"'")
+    res.redirect('index.html');
+})
+
+app.get('/chat',function(req,res){
+    console.log("backend magic")
+    connection.query("select name from users where status ='online' and place ="+"'"+pn+"'",function(err,result){
+        res.send(result);
+
+    })
+})
